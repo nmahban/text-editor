@@ -13,19 +13,33 @@ const initdb = async () =>
   });
 
 export const putDb = async (content) => {
-  console.log("Putting content into the database");
+  console.error("putDb not implemented");
 
   const db = await openDB("jate", 1);
 
-  await db.put("jate", { content });
+  const tx = db.transaction("jate", "readwrite");
+
+  const store = tx.objectStore("jate");
+
+  const request = store.put({ content });
+
+  const result = await request;
+  console.log("🚀 - data saved to the database", result);
 };
 
 export const getDb = async () => {
-  console.log("Getting content from the database");
-
   const db = await openDB("jate", 1);
 
-  return db.getAll("jate");
+  const tx = db.transaction("jate", "readonly");
+
+  const store = tx.objectStore("jate");
+
+  const request = store.getAll();
+
+  const result = await request;
+  console.log(" data retrieved from the databases", result);
+
+  return result;
 };
 
 initdb();
